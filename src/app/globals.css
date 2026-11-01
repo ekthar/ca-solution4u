@@ -1,0 +1,240 @@
+@import "tailwindcss";
+
+/* Screens tall enough for pinned, full-height chapters. */
+@custom-variant tall (@media (min-height: 760px));
+
+/*
+ * CA SOLUTION4U design tokens.
+ * The default Tailwind palette is cleared so only brand colours exist.
+ * Opacity modifiers (white/60, obsidian/10) still work.
+ */
+@theme {
+  --color-*: initial;
+  --color-obsidian: #090a0c;
+  --color-charcoal: #111318;
+  --color-graphite: #1a1d24;
+  --color-paper: #f7f7f4;
+  --color-white: #ffffff;
+  --color-grey: #92949c;
+  --color-ink-soft: #5c5f68;
+  --color-blue: #527bff;
+  --color-silver: #d9dce3;
+  --color-black: #000000;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-inter-tight), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  /* Display scale. Tracking tightens as size grows. */
+  --text-mega: clamp(5rem, -1rem + 30vw, 26rem);
+  --text-mega--line-height: 0.8;
+  --text-mega--letter-spacing: -0.07em;
+
+  --text-hero: clamp(2.75rem, 0.9rem + 6.2vw, 6.5rem);
+  --text-hero--line-height: 0.92;
+  --text-hero--letter-spacing: -0.055em;
+
+  --text-display-lg: clamp(2.4rem, 0.9rem + 5.2vw, 6.25rem);
+  --text-display-lg--line-height: 0.95;
+  --text-display-lg--letter-spacing: -0.05em;
+
+  --text-display-md: clamp(2rem, 1.1rem + 3.2vw, 4.25rem);
+  --text-display-md--line-height: 1;
+  --text-display-md--letter-spacing: -0.042em;
+
+  --text-display-sm: clamp(1.5rem, 1.1rem + 1.4vw, 2.4rem);
+  --text-display-sm--line-height: 1.1;
+  --text-display-sm--letter-spacing: -0.03em;
+
+  --text-lead: clamp(1.0625rem, 0.95rem + 0.45vw, 1.3125rem);
+  --text-lead--line-height: 1.55;
+  --text-lead--letter-spacing: -0.012em;
+
+  --animate-page-enter: page-enter 0.55s var(--ease-out-expo) both;
+  --animate-scroll-cue: scroll-cue 2.4s var(--ease-in-out-quart) infinite;
+  --animate-spin-slow: spin 60s linear infinite;
+  --animate-spin-slower: spin 110s linear infinite reverse;
+  --animate-float: float 10s ease-in-out infinite;
+  --animate-light-drift: light-drift 18s ease-in-out infinite alternate;
+  --animate-streak: streak 7s var(--ease-in-out-quart) infinite;
+  --animate-sheen: sheen 7s ease-in-out infinite;
+  --animate-pulse-dot: pulse-dot 2.4s ease-out infinite;
+  --animate-dash: dash 2.6s linear infinite;
+
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes scroll-cue {
+    0% {
+      transform: translateY(-100%);
+    }
+    60%,
+    100% {
+      transform: translateY(220%);
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translate3d(0, 0, 0);
+    }
+    50% {
+      transform: translate3d(0, -14px, 0);
+    }
+  }
+  @keyframes light-drift {
+    0% {
+      transform: translate3d(-6%, -4%, 0) scale(1);
+    }
+    100% {
+      transform: translate3d(8%, 6%, 0) scale(1.15);
+    }
+  }
+  @keyframes streak {
+    0% {
+      transform: translateX(-120%);
+      opacity: 0;
+    }
+    20% {
+      opacity: 1;
+    }
+    60%,
+    100% {
+      transform: translateX(260%);
+      opacity: 0;
+    }
+  }
+  @keyframes sheen {
+    0%,
+    100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
+  @keyframes pulse-dot {
+    0% {
+      box-shadow: 0 0 0 0 rgb(82 123 255 / 0.55);
+    }
+    100% {
+      box-shadow: 0 0 0 10px rgb(82 123 255 / 0);
+    }
+  }
+  @keyframes dash {
+    to {
+      stroke-dashoffset: -40;
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-blue);
+    color: var(--color-white);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* The mobile contact bar takes this space so it never covers content. */
+  @media (max-width: 767px) {
+    body {
+      padding-bottom: calc(4.5rem + env(safe-area-inset-bottom));
+    }
+  }
+}
+
+@layer utilities {
+  /* Clips a line so text can rise into view from below. */
+  .line-mask {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  /* Brushed-metal fill for display type. */
+  .metal-text {
+    background-image: linear-gradient(
+      100deg,
+      #6b6f78 0%,
+      #f4f5f8 18%,
+      #9da1ab 34%,
+      #ffffff 48%,
+      #80848e 64%,
+      #e9ebf0 80%,
+      #5d616a 100%
+    );
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Frosted glass surface for dark sections. */
+  .glass {
+    background: linear-gradient(140deg, rgb(255 255 255 / 0.1), rgb(255 255 255 / 0.02));
+    border: 1px solid rgb(255 255 255 / 0.12);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.18),
+      0 30px 80px -30px rgb(0 0 0 / 0.7);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+
+  .grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
