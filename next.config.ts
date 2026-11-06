@@ -9,6 +9,7 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   poweredByHeader: false,
+  output: "standalone",
   turbopack: {
     rules: {
       "*.css": {
